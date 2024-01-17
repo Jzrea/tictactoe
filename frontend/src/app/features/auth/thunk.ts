@@ -1,10 +1,10 @@
 import { ActionReducerMapBuilder, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Features } from "@/types/Feature.ts";
 import { UserRegister } from "@/components/forms/register/schema";
 import { AuthState } from "./index.ts";
 import { Login } from "@/components/forms/login/schema";
-import { Status } from "@/types/Status.ts";
+import { Features } from "@/types/Feature.tsx";
+import { Status } from "@/types/Status.tsx";
 
 const type = Features.Auth;
 

@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // import type { PayloadAction } from "@reduxjs/toolkit";
 import { login, register, extraReducers } from "./thunk.ts";
 import { RootState } from "@/app/store";
-import { Features } from "@/types/Feature.ts";
-import { Status } from "@/types/Status.ts";
+import { Features } from "@/types/Feature.tsx";
+import { Status } from "@/types/Status.tsx";
 
 const user = () => {
   const token = localStorage.getItem("user");
