@@ -1,0 +1,24 @@
+.heading {
+  grid-column: 3 / 7;
+  grid-row: 2 / 7;
+}
+
+.form {
+  grid-column: 5 / -5;
+  grid-row: 2 / 7;
+}
+
+.section {
+  margin: auto;
+  margin-top: 20%;
+  height: fit-content;
+  width: fit-content;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  background-color: hsl(var(--popover));
+  @apply p-5 border-2 rounded-xl;
+
+  //   background-color: hsl(var(--card));
+  //   background-color: aqua;;
+}

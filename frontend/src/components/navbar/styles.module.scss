@@ -1,0 +1,36 @@
+.root {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  padding: 5px 30px;
+  width: auto;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 5px 6px, rgba(0, 0, 0, 0.24) 0px 4px 5px;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-bottom: 1px solid hsl(var(--border));
+  div {
+    display: flex;
+    flex-direction: row;
+    // padding: 0px;
+    // margin: auto;
+    // gap: 5px;
+  }
+  a {
+    font-weight: 500;
+    text-decoration: inherit;
+    font-style: italic;
+  }
+}
+
+.controls {
+  grid-column: -1;
+  font-style: italic;
+  font-weight: 500;
+  font-size: medium;
+  button {
+    background-color: transparent;
+  }
+  span {
+    vertical-align: bottom;
+  }
+}
