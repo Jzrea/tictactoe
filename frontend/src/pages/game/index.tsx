@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { numberToRoman } from "@/lib/utils"
 import { Board } from "@/components/board"
 import ConfettiExplosion, { ConfettiProps } from 'react-confetti-explosion';
@@ -18,10 +18,7 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
     const result = players.get("result");
     const latestWinner = result?.charAt(result.length - 1);
 
-    useEffect(() => {
-        setHasWinner(!hasWinner);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result])
+    const navigate = useNavigate();
 
     const mediumProps: ConfettiProps = {
         force: 0.6,
@@ -36,23 +33,27 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
         setOpen(true);
     }
 
+    function onExitHandler() {
+        navigate("/")
+    }
+
     return (<>
         <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogContent>
+            <AlertDialogContent >
                 <AlertDialogHeader>
                     <AlertDialogTitle>Get ready for the next round!</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Exit</AlertDialogCancel>
-                    <AlertDialogAction type='submit'>Continue</AlertDialogAction>
+                    <AlertDialogCancel onClick={onExitHandler}>Exit</AlertDialogCancel>
+                    <AlertDialogAction >Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
         <span className="text-5xl font-bold col-start-4 col-end-[-4] row-start-2 w-full text-center pt-5">Round {numberToRoman(parseInt(round ?? "1"))}</span>
         <div {...props} className={clsx(className, styles.root, "flex justify-center  items-center")}>
-            {latestWinner == "1" && hasWinner && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
-            <Board alert={setOpen} />
-            {latestWinner == "0" && hasWinner && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
+            {(latestWinner == "1" && hasWinner) && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
+            <Board alert={setOpen} setWinner={setHasWinner} />
+            {(latestWinner == "0" && hasWinner) && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
         </div>
     </>
     )

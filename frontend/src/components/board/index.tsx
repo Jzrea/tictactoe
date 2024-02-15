@@ -6,8 +6,8 @@ import { useSearchParams } from "react-router-dom";
 import { checkTicTacToe } from "@/lib/utils";
 
 interface BoardProps extends HTMLAttributes<HTMLDivElement> {
-    alert: React.Dispatch<React.SetStateAction<boolean>>
-
+    alert: React.Dispatch<React.SetStateAction<boolean>>,
+    setWinner: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type Row = [0 | 1 | -1, 0 | 1 | -1, 0 | 1 | -1];
@@ -15,7 +15,7 @@ type Column = [Row, Row, Row];
 
 
 
-export const Board = ({ alert, className, ...props }: BoardProps) => {
+export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => {
     const [pos, setPost] = useState<{
         x: number,
         y: number
@@ -24,12 +24,6 @@ export const Board = ({ alert, className, ...props }: BoardProps) => {
         [-1, -1, -1],
         [-1, -1, -1],
         [-1, -1, -1]]);
-
-    // useEffect(() => {
-    //     const result = ;
-    //     console.log(result);
-
-    // }, [board])
 
     const [players, setPlayers] = useSearchParams()
 
@@ -74,6 +68,7 @@ export const Board = ({ alert, className, ...props }: BoardProps) => {
                     prev.set("result", results?.concat('0') ?? "")
                     return prev
                 }, { replace: true })
+                setWinner(true);
                 return;
             case 1:
                 // Player I
@@ -83,6 +78,7 @@ export const Board = ({ alert, className, ...props }: BoardProps) => {
                     prev.set("result", results?.concat('1') ?? "")
                     return prev
                 }, { replace: true })
+                setWinner(true);
                 return;
             default:
                 if (playerTurn) setPlayers(prev => {
