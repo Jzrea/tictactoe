@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { useSearchParams } from "react-router-dom"
@@ -13,6 +13,9 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
     const round = players.get("round");
     const result = players.get("result");
 
+    useEffect(() => {
+        console.log("triggered")
+    }, [result])
 
 
     return (

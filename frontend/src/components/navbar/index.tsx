@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import styles from './styles.module.scss';
-import { User as UserIcon, Home as HomeIcon } from "lucide-react";
+import { User as UserIcon, Home as HomeIcon, Trophy } from "lucide-react";
 import { Themer } from '../themer/index.tsx';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import clsx from 'clsx';
@@ -26,6 +26,21 @@ export function NavBar({ className }: navbarProps) {
   const playerOne = players.get("one");
   const playerTwo = players.get("two");
   const turn = players.get("turn");
+  const result = players.get("result");
+
+  function getTrophies(player: '0' | '1') {
+    const trophies = result?.split('').filter(char => char == player);
+
+    if (!trophies) return;
+    if (trophies?.length <= 5)
+      return trophies?.map(() => <Trophy className='w-8 h-8' />)
+    else
+      return <>
+        <span>{trophies?.length}</span>
+        <Trophy className='w-8 h-8' />
+      </>
+
+  }
 
   return <nav className={clsx(
     styles.root, className,
@@ -36,9 +51,16 @@ export function NavBar({ className }: navbarProps) {
         <HomeIcon className={clsx(styles.home, "")} />Dashboard
       </Link>}
     {(loc == "/board") && <div className={cn(styles.info, " flex justify-evenly font-bold text-2xl")}>
-      <span className='flex flex-row items-center justify-center space-x-2 p-2 bg-secondary-focus rounded-md shadow-lg'><X className='w-8 h-8' />  <span>{playerOne}</span></span>
+      <div className='items-center space-x-2 max-w-40 overflow-x-auto'>{
+        getTrophies('1')
+      }</div>
+      <span className='flex flex-row items-center justify-center space-x-2 p-2 bg-secondary-focus rounded-md shadow-lg'>
+        <X className='w-8 h-8' />  <span>{playerOne}</span></span>
       <span className='italic m-auto mx-0'>VS</span>
       <span className='flex flex-row items-center justify-center space-x-2 p-2 bg-accent-focus rounded-md shadow-lg'><Circle className='w-8 h-8' />  <span>{playerTwo}</span></span>
+      <div className='items-center space-x-2 max-w-40 overflow-x-auto'>{
+        getTrophies('0')
+      }</div>
     </div>}
     <div className={clsx(styles.controls, "")}>
       <Themer />{
