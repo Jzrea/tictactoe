@@ -5,14 +5,17 @@ import { HTMLAttributes, useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import { checkTicTacToe } from "@/lib/utils";
 
-interface BoardProps extends HTMLAttributes<HTMLDivElement> { }
+interface BoardProps extends HTMLAttributes<HTMLDivElement> {
+    alert: React.Dispatch<React.SetStateAction<boolean>>
+
+}
 
 type Row = [0 | 1 | -1, 0 | 1 | -1, 0 | 1 | -1];
 type Column = [Row, Row, Row];
 
 
 
-export const Board = ({ className, ...props }: BoardProps) => {
+export const Board = ({ alert, className, ...props }: BoardProps) => {
     const [pos, setPost] = useState<{
         x: number,
         y: number
@@ -61,7 +64,7 @@ export const Board = ({ className, ...props }: BoardProps) => {
                     prev.set("round", (round + 1).toString())
                     return prev
                 }, { replace: true })
-
+                alert(true);
                 return;
             case 0:
                 // Player II
