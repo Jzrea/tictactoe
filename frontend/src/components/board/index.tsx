@@ -56,7 +56,7 @@ export const Board = ({ className, ...props }: BoardProps) => {
         switch (checkTicTacToe(tempBoard)) {
             case -1:
                 // DRAW
-                console.log("DRAW")
+                // console.log("DRAW")
                 setPlayers(prev => {
                     prev.set("round", (round + 1).toString())
                     return prev
@@ -65,7 +65,7 @@ export const Board = ({ className, ...props }: BoardProps) => {
                 return;
             case 0:
                 // Player II
-                console.log("WINNER: PLAYER II")
+                // console.log("WINNER: PLAYER II")
 
                 setPlayers(prev => {
                     prev.set("result", results?.concat('0') ?? "")
@@ -74,7 +74,7 @@ export const Board = ({ className, ...props }: BoardProps) => {
                 return;
             case 1:
                 // Player I
-                console.log("WINNER: PLAYER I")
+                // console.log("WINNER: PLAYER I")
 
                 setPlayers(prev => {
                     prev.set("result", results?.concat('1') ?? "")
