@@ -1,0 +1,11 @@
+.ghost {
+}
+
+.card {
+  @apply p-3;
+  svg {
+    width: inherit;
+    height: inherit;
+    @apply select-none;
+  }
+}

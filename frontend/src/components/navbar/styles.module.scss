@@ -5,23 +5,41 @@
   padding: 5px 30px;
   width: auto;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 5px 6px, rgba(0, 0, 0, 0.24) 0px 4px 5px;
-  background-color: hsl(var(--primary));
+  // background-color: hsl(var(--primary));
+  background: linear-gradient(
+    to right,
+    hsl(var(--secondary)),
+    hsl(var(--accent))
+  );
   color: hsl(var(--primary-foreground));
   border-bottom: 1px solid hsl(var(--border));
   div {
     display: flex;
     flex-direction: row;
-    // padding: 0px;
-    // margin: auto;
-    // gap: 5px;
   }
   a {
     font-weight: 500;
     text-decoration: inherit;
     font-style: italic;
   }
+  transition: background-color 0.5s ease;
 }
 
+.turnOne {
+  background: hsl(var(--secondary-hover));
+}
+
+.turnTwo {
+  background: hsl(var(--accent-hover));
+}
+
+.home {
+  grid-column: 1;
+}
+
+.info {
+  grid-column: 2;
+}
 .controls {
   grid-column: -1;
   font-style: italic;

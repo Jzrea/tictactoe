@@ -25,14 +25,20 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          hover: "hsl(var(--primary-hover))",
+          focus: "hsl(var(--primary-focus))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
+          hover: "hsl(var(--secondary-hover))",
+          focus: "hsl(var(--secondary-focus))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
+          hover: "hsl(var(--destructive-hover))",
+          focus: "hsl(var(--destructive-focus))",
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
@@ -41,14 +47,18 @@ module.exports = {
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
+          hover: "hsl(var(--accent-hover))",
+          focus: "hsl(var(--accent-focus))",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
+          inner: "hsl(var(--popover-inner))",
           foreground: "hsl(var(--popover-foreground))",
         },
         card: {
           DEFAULT: "hsl(var(--card))",
+          inner: "hsl(var(--card-inner))",
           foreground: "hsl(var(--card-foreground))",
         },
       },
@@ -74,4 +84,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

@@ -25,5 +25,5 @@ export function Themer({ className }: themerProps) {
             setTheme(true);
         }
     }
-    return (<Button className={clsx(styles.root, className, "px-2 hover:bg-transparent hover:text-foreground dark:hover:text-background")} variant="ghost" onClick={changeTheme}>{themeIsDark ? <MoonIcon /> : <SunIcon />}</Button>);
+    return (<Button className={clsx(styles.root, className, "px-2  hover:text-foreground dark:hover:text-background")} variant="ghost" onClick={changeTheme}>{themeIsDark ? <MoonIcon /> : <SunIcon />}</Button>);
 }

@@ -6,48 +6,89 @@
 
 @layer base {
   :root {
-    --background: 146 47% 97%;
-    --foreground: 140 50% 2%;
-    --card: 146 47% 97%;
-    --card-foreground: 140 50% 2%;
-    --popover: 146 47% 97%;
-    --popover-foreground: 140 50% 2%;
-    --primary: 145 50% 54%;
-    --primary-foreground: 146 47% 97%;
-    --secondary: 224 50% 71%;
-    --secondary-foreground: 140 50% 2%;
-    --muted: 146 47% 20%;
-    --muted-foreground: 140 50% 70%;
-    --accent: 257 50% 61%;
-    --accent-foreground: 140 50% 2%;
-    --destructive: 0 85% 60%;
-    --destructive-foreground: 140 50% 2%;
-    --border: 146 47% 20%;
-    --input: 146 47% 20%;
-    --ring: 257 50% 40%;
+    --background: 0, 0%, 93%;
+    --foreground: 0, 0%, 20%;
+
+    --popover: 0, 0%, 88%;
+    --popover-inner: 0, 0%, 85%;
+    --popover-foreground: 0, 0%, 20%;
+
+    --card: 0, 0%, 86%;
+    --card-inner: 0, 0%, 78%;
+    --card-foreground: 0, 0%, 20%;
+
+    --primary: 34, 100%, 63%;
+    --primary-hover: 34, 100%, 73%;
+    --primary-focus: 34, 100%, 68%;
+    --primary-foreground: 0, 0%, 93%;
+
+    --secondary: 10, 86%, 53%;
+    --secondary-hover: 14, 100%, 60%;
+    --secondary-focus: 14, 100%, 55%;
+    --secondary-foreground: 0, 0%, 93%;
+
+    --accent: 197, 81%, 48%;
+    --accent-hover: 196, 83%, 42%;
+    --accent-focus: 196, 83%, 37%;
+    --accent-foreground: 0, 0%, 93%;
+
+    --destructive: 0, 48%, 43%;
+    --destructive-hover: 0, 46%, 37%;
+    --destructive-focus: 0, 37%, 28%;
+    --destructive-foreground: 0, 0%, 93%;
+
+    --border: 0, 0%, 80%;
+    --input: 0, 0%, 94%;
+
+    --muted: 0, 0%, 71%;
+    --muted-foreground: 0, 0%, 40%;
+
+    --ring: 210, 40%, 54;
+    --shadow: 0, 0%, 20;
+
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 146 47% 3%;
-    --foreground: 144 45% 98%;
-    --card: 147, 14%, 12%;
-    --card-foreground: 144 45% 98%;
-    --popover: 150, 6%, 14%;
-    --popover-foreground: 144 45% 98%;
-    --primary: 145 50% 46%;
-    --primary-foreground: 144 45% 98%;
-    --secondary: 224 50% 29%;
-    --secondary-foreground: 144 45% 98%;
-    --muted: 150 6% 28%;
-    --muted-foreground: 144 45% 98%;
-    --accent: 257 50% 39%;
-    --accent-foreground: 144 45% 98%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 143 45% 10%;
-    --border: 146 47% 60%;
-    --input: 146 47% 80%;
-    --ring: 257 50% 60%;
+    --background: 0, 0%, 20%;
+    --foreground: 0, 0%, 93%;
+
+    --popover: 0, 0%, 20%;
+    --popover-inner: 0, 0%, 27%;
+    --popover-foreground: 0, 0%, 93%;
+
+    --card: 0, 0%, 27%;
+    --card-inner: 0, 0%, 33%;
+    --card-foreground: 0, 0%, 93%;
+
+    --primary: 34, 100%, 63%;
+    --primary-hover: 34, 100%, 73%;
+    --primary-focus: 34, 100%, 68%;
+    --primary-foreground: 0, 0%, 93%;
+
+    --secondary: 10, 86%, 53%;
+    --secondary-hover: 14, 100%, 60%;
+    --secondary-focus: 14, 100%, 55%;
+    --secondary-foreground: 0, 0%, 93%;
+
+    --accent: 197, 81%, 48%;
+    --accent-hover: 196, 83%, 42%;
+    --accent-focus: 196, 83%, 37%;
+    --accent-foreground: 0, 0%, 93%;
+
+    --destructive: 0, 48%, 43%;
+    --destructive-hover: 0, 46%, 37%;
+    --destructive-focus: 0, 37%, 28%;
+    --destructive-foreground: 0, 0%, 93%;
+
+    --border: 0, 0%, 33%;
+    --input: 0, 0%, 13%;
+
+    --muted: 0, 0%, 40%;
+    --muted-foreground: 0, 0%, 71%;
+
+    --ring: 208, 36%, 37%;
+    --shadow: 0, 0%, 100%;
   }
 }
 
@@ -57,6 +98,21 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @layer responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
   }
 }
 
@@ -72,4 +128,26 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted));
+  border-radius: 20px;
+  border: transparent;
+}
+
+* {
+  box-sizing: border-box;
+  *::-webkit-scrollbar {
+    height: 0.4rem;
+    width: 0.4rem;
+    cursor: pointer;
+    padding: 0.2rem;
+  }
 }
