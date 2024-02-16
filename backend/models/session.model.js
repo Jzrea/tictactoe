@@ -21,7 +21,7 @@ const SessionSchema = new Schema({
         required: true,
         validate: [validatePlayerTwoNotEqualToPlayerOne, 'playerTwo must be different from playerOne']
     },
-    results: {
+    result: {
         type: String,
         required: true,
         validate: [validateResults, 'results must only contain 0, 1, or 2']

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { Button } from "@/components/ui/button"
@@ -11,66 +11,67 @@ import { Input } from "@/components/ui/input"
 import { ArrowRight } from "lucide-react"
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "@/components/ui/use-toast"
+import axios from "axios"
 
-const gameSessions: GameSession[] = [
-    {
-        playerOne: "Alice",
-        playerTwo: "Bob",
-        result: "012"
-    },
-    {
-        playerOne: "Charlie",
-        playerTwo: "Diana",
-        result: "021"
-    },
-    {
-        playerOne: "Eve",
-        playerTwo: "Frank",
-        result: "120"
-    },
-    {
-        playerOne: "Grace",
-        playerTwo: "Harry",
-        result: "201"
-    },
-    {
-        playerOne: "Ivy",
-        playerTwo: "Jack",
-        result: "102"
-    },
-    {
-        playerOne: "Katie",
-        playerTwo: "Liam",
-        result: "210"
-    },
-    {
-        playerOne: "Mia",
-        playerTwo: "Noah",
-        result: "012"
-    },
-    {
-        playerOne: "Olivia",
-        playerTwo: "Peter",
-        result: "201"
-    },
-    {
-        playerOne: "Quinn",
-        playerTwo: "Ryan",
-        result: "102"
-    },
-    {
-        playerOne: "Sarah",
-        playerTwo: "Tyler",
-        result: "021"
-    }
-];
+// const gameSessions: GameSession[] = [
+//     {
+//         playerOne: "Alice",
+//         playerTwo: "Bob",
+//         result: "012"
+//     },
+//     {
+//         playerOne: "Charlie",
+//         playerTwo: "Diana",
+//         result: "021"
+//     },
+//     {
+//         playerOne: "Eve",
+//         playerTwo: "Frank",
+//         result: "120"
+//     },
+//     {
+//         playerOne: "Grace",
+//         playerTwo: "Harry",
+//         result: "201"
+//     },
+//     {
+//         playerOne: "Ivy",
+//         playerTwo: "Jack",
+//         result: "102"
+//     },
+//     {
+//         playerOne: "Katie",
+//         playerTwo: "Liam",
+//         result: "210"
+//     },
+//     {
+//         playerOne: "Mia",
+//         playerTwo: "Noah",
+//         result: "012"
+//     },
+//     {
+//         playerOne: "Olivia",
+//         playerTwo: "Peter",
+//         result: "201"
+//     },
+//     {
+//         playerOne: "Quinn",
+//         playerTwo: "Ryan",
+//         result: "102"
+//     },
+//     {
+//         playerOne: "Sarah",
+//         playerTwo: "Tyler",
+//         result: "021"
+//     }
+// ];
 
 interface DashboardPageProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
     const [inputValue, setInputValue] = useState<string>("");
-
+    const [sessions, setSessions] = useState<GameSession[]>([]);
     const [players, setPlayers] = useSearchParams({
         one: "",
         two: ""
@@ -86,6 +87,36 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
             "default";
 
     const isPlayersSet = (variant == "default");
+
+    async function loadSessions() {
+        try {
+            const req = await axios.get("/session");
+            const tempSessions: GameSession[] = (req.data as []).map(({ _id, playerOne, playerTwo, result }) => {
+                return {
+                    id: _id,
+                    playerOne,
+                    playerTwo,
+                    result
+                }
+            });
+            setSessions(tempSessions);
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message)
+                toast({
+                    variant: "destructive",
+                    title: "Something went wrong fetching sessions",
+                    description: err.message,
+                })
+            }
+        }
+    }
+
+    useEffect(() => {
+        loadSessions()
+        // console.log("triggered")
+    }, [])
+
 
     function handleSetPlayer() {
         if (isPlayersSet) {
@@ -147,7 +178,7 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
                             <Button className=" w-fit place-self-end">New Game</Button>
                         </DialogTrigger>
                     </div>
-                    <ScoreBoard className="" columns={columns} data={gameSessions} />
+                    <ScoreBoard className="" columns={columns} data={sessions} />
                 </div>
             </div>
             <DialogContent className="sm:max-w-md">

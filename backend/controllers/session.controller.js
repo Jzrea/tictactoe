@@ -10,10 +10,9 @@ const getSessions = asyncHandler(async (req, res) => {
     try {
         const sessions = await Sessions.find().skip(offset).limit(limit);
         if (!sessions) return res.status(404).json({ message: 'No session found.' });
-        res.status(200).json({
-            sessions
-        });
-    } catch (error) {
+        res.status(200).json(sessions);
+    } catch (err) {
+        console.error(err.message);
         res.status(400).json({ msg: err.message });
     }
 });
@@ -32,10 +31,12 @@ const saveSession = asyncHandler(async (req, res) => {
             playerTwo,
             result
         });
+
         if (!newSession) throw Error('Something went wrong saving the item');
 
         res.status(200).json(newSession);
     } catch (err) {
+        console.error(err.message);
         res.status(400).json({ msg: err.message });
 
     }

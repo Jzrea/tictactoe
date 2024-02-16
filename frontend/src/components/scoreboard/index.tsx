@@ -58,8 +58,8 @@ export function ScoreBoard<TData, TValue>({
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
-                                wow such emptiness.
+                            <TableCell colSpan={columns.length} className="h-24 text-center italic font-semibold">
+                                Wow such emptiness . . .
                             </TableCell>
                         </TableRow>
                     )}

@@ -8,6 +8,7 @@ import { Circle as PlayerTwo, X as PlayerOne, HeartHandshake as Draw } from "luc
 // type Columns = [Rows, Rows, Rows];
 
 export type GameSession = {
+    id: string,
     playerOne: string,
     playerTwo: string,
     result: string //should only contain combinations of 0|1|2

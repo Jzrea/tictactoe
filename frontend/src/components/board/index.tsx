@@ -1,10 +1,12 @@
 import clsx from "clsx"
 import styles from "./styles.module.scss"
 import { Circle, X } from "lucide-react";
-import { HTMLAttributes, useState } from "react"
+import { HTMLAttributes, useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { checkTicTacToe } from "@/lib/utils";
 import { AlertDialogAction, AlertDialogCancel, AlertDialogFooter, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
+import axios from "axios";
+import { toast } from "../ui/use-toast";
 
 interface BoardProps extends HTMLAttributes<HTMLDivElement> {
     alert: React.Dispatch<React.SetStateAction<boolean>>,
@@ -17,11 +19,12 @@ type Column = [Row, Row, Row];
 
 
 export const Board = ({ alert, winnerState, className, ...props }: BoardProps) => {
+    const boardRef = useRef<HTMLDivElement | null>(null);
     const [hasWinner, setHasWinner] = winnerState;
     const [pos, setPost] = useState<{
         x: number,
         y: number
-    } | null>();
+    } | null>(null);
     const [board, setBoard] = useState<Column>([
         [-1, -1, -1],
         [-1, -1, -1],
@@ -33,68 +36,75 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
     const playerTwo = players.get("two");
     const playerTurn = players.get("turn") == playerOne;
     const currentTurn = players.get("turn");
-    const results = players.get("result");
+    const result = players.get("result") ?? "";
     const round = parseInt(players.get("round") ?? "1");
 
 
-    function handleMouseOver(col: number, row: number, val: number) {
-        if (val != -1) return;
-        setPost({
-            x: row,
-            y: col
-        })
+    function onMouseMoveHandler(e: MouseEvent) {
+        // GET MOUSE GRID POSITION
+        const rect = document.querySelector("#grid-board");
+        if (!rect) return;
+        const x = Math.floor((e.clientX - rect.getBoundingClientRect().left) / (rect.clientWidth / 3)),
+            y = Math.floor((e.clientY - rect.getBoundingClientRect().top) / (rect.clientHeight / 3));
+        if (x < 0 || y < 0 || x >= 4 || y >= 4) return;
+        if (board[y][x] != -1) return;
+
+        setPost({ x: x + 1, y: y + 1 })
     }
 
-    function handlePlayerClick() {
-        if (pos?.x == null || pos.y == null) return;
-        if (board[pos?.y - 1][pos?.x - 1] != -1) return;
-        const tempBoard = board;
-        tempBoard[pos?.y - 1][pos?.x - 1] = (playerTurn) ? 1 : 0;
-        setBoard(tempBoard);
-        setPost(null)
+    useEffect(() => {
+        window.addEventListener("mousemove", onMouseMoveHandler);
+        return () => {
+            window.removeEventListener('mousemove', onMouseMoveHandler);
+        }
+    }, [board])
 
+    function handlePlayerClick() {
+        const rect = document.querySelector("#grid-board");
+        if (!rect || !pos) return;
+        if (board[pos?.y - 1][pos?.x - 1] != -1) return;
+
+        const tempBoard: Column = [...board];
+        tempBoard[pos?.y - 1][pos?.x - 1] = (playerTurn) ? 1 : 0;
         switch (checkTicTacToe(tempBoard)) {
             case -1:
                 // DRAW          
                 setPlayers(prev => {
-                    prev.set("result", results?.concat('2') ?? "")// 2 - for DRAW
+                    prev.set("result", result?.concat('2') ?? "")// 2 - for DRAW
                     return prev
                 }, { replace: true })
                 alert(true);
                 return;
             case 0:
-                // Player II
+                // Player I
                 setPlayers(prev => {
-                    prev.set("result", results?.concat('0') ?? "") // 0 - PLAYER II WINN
+                    prev.set("result", result?.concat('0') ?? "") // 1 - PLAYER I WINN                    
                     return prev
                 }, { replace: true })
                 setHasWinner(true);
                 return;
             case 1:
-                // Player I
+                // Player II
                 setPlayers(prev => {
-                    prev.set("result", results?.concat('1') ?? "") // 1 - PLAYER I WINN
+                    prev.set("result", result?.concat('1') ?? "") // 0 - PLAYER II WINN                    
                     return prev
                 }, { replace: true })
                 setHasWinner(true);
                 return;
-            default:
-                if (playerTurn) setPlayers(prev => {
-                    prev.set("turn", playerTwo ?? "")
-                    return prev
-                })
-                else
-                    setPlayers(prev => {
-                        prev.set("turn", playerOne ?? "")
-                        return prev
-                    })
         }
+        setPlayers(prev => {
+            prev.set("turn", ((playerTurn) ? playerTwo : playerOne) ?? "")
+            return prev
+        })
+        setBoard(tempBoard);
+        setPost(null)
     }
 
 
     function onContinueGame() {
         setPlayers(prev => {
             prev.set("round", (round + 1).toString())
+            prev.set("turn", ((playerTurn) ? playerTwo : playerOne) ?? "")
             return prev
         }, { replace: true });
         setHasWinner(!hasWinner);
@@ -105,12 +115,35 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
     }
 
     const navigate = useNavigate();
+
+    async function saveSession() {
+
+        try {
+            await axios.post("/session", {
+                playerOne,
+                playerTwo,
+                result
+            });
+
+        } catch (err) {
+            if (err instanceof Error) {
+
+                toast({
+                    variant: "destructive",
+                    title: "Something went wrong saving session",
+                    description: err.message,
+                })
+            }
+        }
+    }
+
     function onExitHandler() {
+        saveSession();
         navigate("/")
     }
 
     return (<>
-        <div {...props} className={clsx("bg-card p-3 w-2/3 h-3/4 rounded-md  grid grid-cols-3 grid-rows-3 gap-2", className)} >{
+        <div id="grid-board" ref={boardRef} {...props} className={clsx("bg-card p-3 w-2/3 h-3/4 rounded-md  grid grid-cols-3 grid-rows-3 gap-2", className)} >{
             board.map((column, col) => {
                 return column.map((row, rowIndex) => {
                     return (<span
@@ -123,7 +156,7 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
                             gridColumn: `${rowIndex + 1} / ${rowIndex + 2}`,
                             gridRow: `${col + 1} / ${col + 2}`
                         }}
-                        onMouseEnter={() => { handleMouseOver(col + 1, rowIndex + 1, row) }}
+                    // onMouseEnter={() => { handleMouseOver(col + 1, rowIndex + 1, row) }}
                     >{
                             row != -1 && (row == 1 ? <X /> : <Circle />)
                         }</span>)

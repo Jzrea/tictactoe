@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { useSearchParams } from "react-router-dom"
@@ -30,6 +30,10 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
     function onConfettiComplete() {
         setOpen(true);
     }
+
+    useEffect(() => {
+        setHasWinner(true);
+    }, [result])
 
 
 
