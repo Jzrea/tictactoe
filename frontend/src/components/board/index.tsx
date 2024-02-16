@@ -2,12 +2,13 @@ import clsx from "clsx"
 import styles from "./styles.module.scss"
 import { Circle, X } from "lucide-react";
 import { HTMLAttributes, useState } from "react"
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { checkTicTacToe } from "@/lib/utils";
+import { AlertDialogAction, AlertDialogCancel, AlertDialogFooter, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
 
 interface BoardProps extends HTMLAttributes<HTMLDivElement> {
     alert: React.Dispatch<React.SetStateAction<boolean>>,
-    setWinner: React.Dispatch<React.SetStateAction<boolean>>
+    winnerState: [boolean, React.Dispatch<React.SetStateAction<boolean>>],
 }
 
 type Row = [0 | 1 | -1, 0 | 1 | -1, 0 | 1 | -1];
@@ -15,7 +16,8 @@ type Column = [Row, Row, Row];
 
 
 
-export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => {
+export const Board = ({ alert, winnerState, className, ...props }: BoardProps) => {
+    const [hasWinner, setHasWinner] = winnerState;
     const [pos, setPost] = useState<{
         x: number,
         y: number
@@ -30,6 +32,7 @@ export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => 
     const playerOne = players.get("one");
     const playerTwo = players.get("two");
     const playerTurn = players.get("turn") == playerOne;
+    const currentTurn = players.get("turn");
     const results = players.get("result");
     const round = parseInt(players.get("round") ?? "1");
 
@@ -52,33 +55,28 @@ export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => 
 
         switch (checkTicTacToe(tempBoard)) {
             case -1:
-                // DRAW
-                // console.log("DRAW")
+                // DRAW          
                 setPlayers(prev => {
-                    prev.set("round", (round + 1).toString())
+                    prev.set("result", results?.concat('2') ?? "")// 2 - for DRAW
                     return prev
                 }, { replace: true })
                 alert(true);
                 return;
             case 0:
                 // Player II
-                // console.log("WINNER: PLAYER II")
-
                 setPlayers(prev => {
-                    prev.set("result", results?.concat('0') ?? "")
+                    prev.set("result", results?.concat('0') ?? "") // 0 - PLAYER II WINN
                     return prev
                 }, { replace: true })
-                setWinner(true);
+                setHasWinner(true);
                 return;
             case 1:
                 // Player I
-                // console.log("WINNER: PLAYER I")
-
                 setPlayers(prev => {
-                    prev.set("result", results?.concat('1') ?? "")
+                    prev.set("result", results?.concat('1') ?? "") // 1 - PLAYER I WINN
                     return prev
                 }, { replace: true })
-                setWinner(true);
+                setHasWinner(true);
                 return;
             default:
                 if (playerTurn) setPlayers(prev => {
@@ -93,7 +91,25 @@ export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => 
         }
     }
 
-    return (
+
+    function onContinueGame() {
+        setPlayers(prev => {
+            prev.set("round", (round + 1).toString())
+            return prev
+        }, { replace: true });
+        setHasWinner(!hasWinner);
+        setBoard([
+            [-1, -1, -1],
+            [-1, -1, -1],
+            [-1, -1, -1]]);
+    }
+
+    const navigate = useNavigate();
+    function onExitHandler() {
+        navigate("/")
+    }
+
+    return (<>
         <div {...props} className={clsx("bg-card p-3 w-2/3 h-3/4 rounded-md  grid grid-cols-3 grid-rows-3 gap-2", className)} >{
             board.map((column, col) => {
                 return column.map((row, rowIndex) => {
@@ -131,5 +147,17 @@ export const Board = ({ alert, setWinner, className, ...props }: BoardProps) => 
                     }</span>
             }
         </div>
+        <AlertDialogContent >
+            <AlertDialogHeader>
+                <AlertDialogTitle>{(hasWinner) ? `WINNER ${currentTurn}!!` : "DRAW!!"}</AlertDialogTitle>
+                <AlertDialogDescription>Get ready for the next round!</AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+                <AlertDialogCancel onClick={onExitHandler}>Exit</AlertDialogCancel>
+                <AlertDialogAction onClick={onContinueGame}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </>
     )
 }

@@ -10,96 +10,58 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { ArrowRight } from "lucide-react"
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom"
+import { toast } from "@/components/ui/use-toast"
 
 const gameSessions: GameSession[] = [
     {
         playerOne: "Alice",
         playerTwo: "Bob",
-        winner: "player 1"
+        result: "012"
     },
     {
         playerOne: "Charlie",
         playerTwo: "Diana",
-        winner: "player 2"
+        result: "021"
     },
     {
         playerOne: "Eve",
         playerTwo: "Frank",
-        winner: "draw"
+        result: "120"
     },
     {
         playerOne: "Grace",
         playerTwo: "Harry",
-        winner: "player 1"
+        result: "201"
     },
     {
         playerOne: "Ivy",
-        playerTwo: "Jack"
+        playerTwo: "Jack",
+        result: "102"
     },
     {
         playerOne: "Katie",
-        playerTwo: "Liam"
+        playerTwo: "Liam",
+        result: "210"
     },
     {
         playerOne: "Mia",
         playerTwo: "Noah",
-        winner: "draw"
+        result: "012"
     },
     {
         playerOne: "Olivia",
         playerTwo: "Peter",
-        winner: "player 2"
+        result: "201"
     },
     {
         playerOne: "Quinn",
         playerTwo: "Ryan",
-        winner: "player 1"
+        result: "102"
     },
     {
         playerOne: "Sarah",
-        playerTwo: "Tyler"
-    },
-    {
-        playerOne: "Charlie",
-        playerTwo: "Diana",
-        winner: "player 2"
-    },
-    {
-        playerOne: "Eve",
-        playerTwo: "Frank",
-        winner: "draw"
-    },
-    {
-        playerOne: "Grace",
-        playerTwo: "Harry",
-        winner: "player 1"
-    },
-    {
-        playerOne: "Ivy",
-        playerTwo: "Jack"
-    },
-    {
-        playerOne: "Katie",
-        playerTwo: "Liam"
-    },
-    {
-        playerOne: "Mia",
-        playerTwo: "Noah",
-        winner: "draw"
-    },
-    {
-        playerOne: "Olivia",
-        playerTwo: "Peter",
-        winner: "player 2"
-    },
-    {
-        playerOne: "Quinn",
-        playerTwo: "Ryan",
-        winner: "player 1"
-    },
-    {
-        playerOne: "Sarah",
-        playerTwo: "Tyler"
+        playerTwo: "Tyler",
+        result: "021"
     }
 ];
 
@@ -141,11 +103,20 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
             return
         }
         const setCurrentPlayer = (playerOne?.trim() === '' || playerOne == null) ? "one" : "two";
-        setPlayers(prev => {
-            prev.set(setCurrentPlayer, inputValue)
+        if (playerOne == null || playerOne?.toLowerCase() != inputValue.toLowerCase())
+            setPlayers(prev => {
+                prev.set(setCurrentPlayer, inputValue)
+                setInputValue("");
+                return prev
+            })
+        else {
             setInputValue("");
-            return prev
-        })
+            toast({
+                variant: "destructive",
+                title: "Nickname taken",
+                description: "Use diffrent nickname",
+            })
+        }
 
 
     }
