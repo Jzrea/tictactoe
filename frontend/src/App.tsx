@@ -15,8 +15,8 @@ function App() {
     <>
       <NavBar className="nav" />
       <Routes>
-        <Route path='/' element={<DashboardPage className="container" />} />
-        <Route path='/board' element={<BoardPage className="container" />} />
+        <Route path='/' element={<DashboardPage className="main" />} />
+        <Route path='/board' element={<BoardPage className="main" />} />
       </Routes>
     </>
   )

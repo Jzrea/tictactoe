@@ -14,9 +14,9 @@
   height: 100%;
 }
 
-.container {
+.main {
   grid-row: 2 / -1;
-  grid-column: 4 / -4;
+  grid-column: 1 / -1;
   height: 100%;
   width: 100%;
   border-radius: var(--radius);
@@ -26,4 +26,6 @@
       box-shadow: none;
     }
   }
+  @apply lg:col-start-4 lg:col-end-[-4]
+        xl:col-start-5 xl:col-end-[-5];
 }

@@ -81,6 +81,17 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontSize: {
+        sm: "clamp(0.8rem, -0.15vw + 0.84rem, 0.66rem)",
+        base: "clamp(1rem, -0.13vw + 1.03rem, 0.88rem)",
+        lg: "clamp(1.25rem, -0.09vw + 1.27rem, 1.17rem)",
+        xl: "clamp(1.56rem, -0.01vw + 1.56rem, 1.55rem)",
+        "2xl": "clamp(1.95rem, 0.13vw + 1.92rem, 2.07rem)",
+        "3xl": "clamp(2.44rem, 0.34vw + 2.36rem, 2.76rem)",
+        "4xl": "clamp(3.05rem, 0.66vw + 2.89rem, 3.68rem)",
+        "5xl": "clamp(3.81rem, 1.15vw + 3.53rem, 4.91rem)",
+        "6xl": "clamp(4.77rem, 1.87vw + 4.3rem, 6.54rem)",
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

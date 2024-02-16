@@ -147,14 +147,14 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
     }
 
     return (<>
-        <div id="grid-board" ref={boardRef} {...props} className={clsx("bg-card p-3 w-2/3 h-3/4 rounded-md  grid grid-cols-3 grid-rows-3 gap-2", className)} >{
+        <div id="grid-board" ref={boardRef} {...props} className={clsx("bg-card p-3  rounded-md  grid grid-cols-3 grid-rows-3 gap-2", className)} >{
             board.map((column, col) => {
                 return column.map((row, rowIndex) => {
                     return (<span
                         key={`${rowIndex}:${col}`}
                         className={clsx(styles.card,
-                            "bg-card-inner w-full h-full shadow-md font-extrabold text-8xl flex justify-center content-center",
-                            (row != -1) && ((row == 1) ? "bg-secondary-focus" : "bg-accent-focus")
+                            "w-full h-full shadow-md  content-center",
+                            (row != -1) ? ((row == 1) ? "bg-secondary-focus" : "bg-accent-focus") : "bg-card-inner "
                         )}
                         style={{
                             gridColumn: `${rowIndex + 1} / ${rowIndex + 2}`,

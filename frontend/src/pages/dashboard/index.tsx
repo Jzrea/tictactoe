@@ -134,7 +134,7 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
         <ScoreBoardContext.Provider value={{ sessions, setSessions, loadSessions }}>
             <Dialog>
                 <div {...props} className={clsx(className, styles.root, "flex justify-center  items-center")}>
-                    <div className="bg-card space-y-4 p-5 w-2/3 h-3/4 rounded-md flex flex-col ">
+                    <div className="bg-card space-y-4 p-5 w-full h-3/4 rounded-md flex flex-col ">
                         <div className="flex justify-between  items-center">
                             <span className="text-xl font-bold">Game Sessions</span>
                             <DialogTrigger>

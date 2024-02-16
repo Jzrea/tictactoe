@@ -36,17 +36,17 @@ export function NavBar({ className }: navbarProps) {
   function getTrophies(player: '0' | '1') {
     const trophies = result?.split('')//.filter(char => char == player);
     if (!trophies) return;
-    const rounds = trophies?.length <= 5;
+    const rounds = trophies?.length < 5;
 
     if (rounds)
       return trophies?.map((char) => {
         if (char == player) {
-          return <Trophy className='w-8 h-8' />
+          return <Trophy className='' />
         } else if (char == '2') {
-          return <Draw className='w-8 h-8' />
+          return <Draw className='' />
 
         } else {
-          return <Loser className='w-8 h-8' />
+          return <Loser className='' />
 
         }
       })
@@ -58,16 +58,16 @@ export function NavBar({ className }: navbarProps) {
         {wins != 0 &&
           <div className='space-x-1 items-center'>
             <span>{wins}</span>
-            <Trophy className='w-7 h-7 ' />
+            <Trophy className='' />
           </div>
         }
         {draws != 0 && <div className='space-x-1 items-center'>
           <span>{draws}</span>
-          <Draw className='w-7 h-7 ' />
+          <Draw className='' />
         </div>}
         {loses != 0 && <div className='space-x-1 items-center'>
           <span>{loses}</span>
-          <Loser className='w-7 h-7 ' />
+          <Loser className='' />
         </div>}
       </>
     }
@@ -112,8 +112,8 @@ export function NavBar({ className }: navbarProps) {
       :
       <AlertDialog>
         <AlertDialogTrigger>
-          <Button variant="ghost" className='p-2 w-fit flex gap-2 text-xl '>
-            <HomeIcon className={clsx(styles.home, "")} />Dashboard
+          <Button variant="ghost" className='w-fit flex gap-2 text-xl'>
+            <HomeIcon className={clsx(styles.home, "")} />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent >
@@ -128,14 +128,14 @@ export function NavBar({ className }: navbarProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>}
-    {(loc == "/board") && <div className={cn(styles.info, " flex justify-evenly font-bold text-2xl")}>
+    {(loc == "/board") && <div className={cn(styles.info, " flex justify-evenly font-semibold text-base")}>
       <div className='items-center space-x-3 max-w-44 overflow-x-auto'>{
         getTrophies('1')
       }</div>
-      <span className='flex flex-row items-center justify-center space-x-2 p-2 bg-secondary-focus rounded-md shadow-lg'>
+      <span className='flex flex-row items-center justify-center space-x-2 px-2 py-1 bg-secondary-focus rounded-md shadow-lg'>
         <X className='w-8 h-8' />  <span>{playerOne}</span></span>
       <span className='italic m-auto mx-0'>VS</span>
-      <span className='flex flex-row items-center justify-center space-x-2 p-2 bg-accent-focus rounded-md shadow-lg'><Circle className='w-8 h-8' />  <span>{playerTwo}</span></span>
+      <span className='flex flex-row items-center justify-center space-x-2 px-2 py-1 bg-accent-focus rounded-md shadow-lg'><Circle className='w-8 h-8' />  <span>{playerTwo}</span></span>
       <div className='items-center space-x-3 max-w-44 overflow-x-auto'>{
         getTrophies('0')
       }</div>
