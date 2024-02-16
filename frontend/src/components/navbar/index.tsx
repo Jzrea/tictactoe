@@ -10,6 +10,7 @@ import { toast } from '../ui/use-toast.ts';
 import axios from 'axios';
 import { EventHandler } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog.tsx';
+import { Button } from '../ui/button.tsx';
 
 
 export interface navbarProps {
@@ -111,9 +112,9 @@ export function NavBar({ className }: navbarProps) {
       :
       <AlertDialog>
         <AlertDialogTrigger>
-          <Link className={clsx('inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50', 'p-2 w-fit flex gap-2 text-xl hover:bg-accent hover:text-accent-foreground')} to={'/'}>
+          <Button variant="ghost" className='p-2 w-fit flex gap-2 text-xl '>
             <HomeIcon className={clsx(styles.home, "")} />Dashboard
-          </Link>
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent >
           <AlertDialogHeader>
@@ -123,7 +124,7 @@ export function NavBar({ className }: navbarProps) {
 
           <AlertDialogFooter>
             <AlertDialogCancel onClick={onExitHandler}>Exit</AlertDialogCancel>
-            <AlertDialogAction >Continue</AlertDialogAction>
+            <AlertDialogAction >Continue playing</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>}

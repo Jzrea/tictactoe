@@ -57,7 +57,7 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
         return () => {
             window.removeEventListener('mousemove', onMouseMoveHandler);
         }
-    }, [])
+    }, [board])
 
     function handlePlayerClick() {
         const rect = document.querySelector("#grid-board");
@@ -65,7 +65,9 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
         if (board[pos?.y - 1][pos?.x - 1] != -1) return;
         const tempBoard: Column = [...board];
         tempBoard[pos?.y - 1][pos?.x - 1] = (playerTurn) ? 1 : 0;
-        switch (checkTicTacToe(tempBoard)) {
+        const checkboard = checkTicTacToe(tempBoard);
+        // console.log(checkboard)
+        switch (checkboard) {
             case -1:
                 // DRAW          
                 setPlayers(prev => {
@@ -73,7 +75,7 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
                     return prev
                 }, { replace: true })
                 alert(true);
-                return;
+                break;
             case 0:
                 // Player I
                 setPlayers(prev => {
@@ -81,7 +83,7 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
                     return prev
                 }, { replace: true })
                 setHasWinner(true);
-                return;
+                break;
             case 1:
                 // Player II
                 setPlayers(prev => {
@@ -89,12 +91,15 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
                     return prev
                 }, { replace: true })
                 setHasWinner(true);
-                return;
+                break;
+            default:
+                setPlayers(prev => {
+                    prev.set("turn", ((playerTurn) ? playerTwo : playerOne) ?? "")
+                    return prev
+                }, { replace: true })
+
+                break;
         }
-        setPlayers(prev => {
-            prev.set("turn", ((playerTurn) ? playerTwo : playerOne) ?? "")
-            return prev
-        })
         setBoard(tempBoard);
         setPost(null)
     }

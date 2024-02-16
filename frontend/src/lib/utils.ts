@@ -37,11 +37,10 @@ export function numberToRoman(num: number) {
 function boardContainsNegativeOne(board) {
   const flattenMap = board.flat();
   const countOfMinusOne = flattenMap.filter((element) => element === -1).length;
-  return countOfMinusOne <= 1;
+  return countOfMinusOne <= 0;
 }
 
 export function checkTicTacToe(board) {
-  if (boardContainsNegativeOne(board)) return -1;
   // Check rows
   for (let i = 0; i < 3; i++) {
     if (
@@ -81,6 +80,6 @@ export function checkTicTacToe(board) {
   }
 
   // If no winner, return -1
-
+  if (boardContainsNegativeOne(board)) return -1;
   return null; // No winner
 }

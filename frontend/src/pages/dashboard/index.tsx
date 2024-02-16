@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react"
+import React, { ChangeEvent, createContext, useEffect, useState } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { Button } from "@/components/ui/button"
@@ -13,58 +13,13 @@ import { createSearchParams, useNavigate, useSearchParams } from "react-router-d
 import { toast } from "@/components/ui/use-toast"
 import axios from "axios"
 
-// const gameSessions: GameSession[] = [
-//     {
-//         playerOne: "Alice",
-//         playerTwo: "Bob",
-//         result: "012"
-//     },
-//     {
-//         playerOne: "Charlie",
-//         playerTwo: "Diana",
-//         result: "021"
-//     },
-//     {
-//         playerOne: "Eve",
-//         playerTwo: "Frank",
-//         result: "120"
-//     },
-//     {
-//         playerOne: "Grace",
-//         playerTwo: "Harry",
-//         result: "201"
-//     },
-//     {
-//         playerOne: "Ivy",
-//         playerTwo: "Jack",
-//         result: "102"
-//     },
-//     {
-//         playerOne: "Katie",
-//         playerTwo: "Liam",
-//         result: "210"
-//     },
-//     {
-//         playerOne: "Mia",
-//         playerTwo: "Noah",
-//         result: "012"
-//     },
-//     {
-//         playerOne: "Olivia",
-//         playerTwo: "Peter",
-//         result: "201"
-//     },
-//     {
-//         playerOne: "Quinn",
-//         playerTwo: "Ryan",
-//         result: "102"
-//     },
-//     {
-//         playerOne: "Sarah",
-//         playerTwo: "Tyler",
-//         result: "021"
-//     }
-// ];
+export interface ScoreBoardContextProps {
+    sessions?: GameSession[],
+    setSessions?: React.Dispatch<React.SetStateAction<GameSession[]>>,
+    loadSessions?: CallableFunction
+}
+
+export const ScoreBoardContext = createContext<ScoreBoardContextProps>({});
 
 interface DashboardPageProps extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -72,6 +27,7 @@ interface DashboardPageProps extends React.HTMLAttributes<HTMLDivElement> {
 export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [sessions, setSessions] = useState<GameSession[]>([]);
+    const [hasMoreSessions, setHasMoreSession] = useState<boolean>(true);
     const [players, setPlayers] = useSearchParams({
         one: "",
         two: ""
@@ -90,8 +46,14 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
 
     async function loadSessions() {
         try {
-            const req = await axios.get("/session");
-            const tempSessions: GameSession[] = (req.data as []).map(({ _id, playerOne, playerTwo, result }) => {
+            if (!hasMoreSessions) return;
+            const req = await axios.get("/session", {
+                params: {
+                    offset: (sessions.length == 0) ? 0 : sessions.length - 1,
+                    limit: (sessions.length == 0) ? 20 : 10
+                }
+            });
+            const tempSessions: GameSession[] = (req.data.payload as []).map(({ _id, playerOne, playerTwo, result }) => {
                 return {
                     id: _id,
                     playerOne,
@@ -99,7 +61,8 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
                     result
                 }
             });
-            setSessions(tempSessions);
+            setSessions([...sessions, ...tempSessions]);
+            setHasMoreSession(req.data.hasMore)
         } catch (err) {
             if (err instanceof Error) {
                 console.error(err.message)
@@ -114,7 +77,6 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
 
     useEffect(() => {
         loadSessions()
-        // console.log("triggered")
     }, [])
 
 
@@ -169,47 +131,50 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
     };
 
     return (
-        <Dialog>
-            <div {...props} className={clsx(className, styles.root, "flex justify-center  items-center")}>
-                <div className="bg-card space-y-4 p-5 w-2/3 h-3/4 rounded-md flex flex-col ">
-                    <div className="flex justify-between  items-center">
-                        <span className="text-xl font-bold">Game Sessions</span>
-                        <DialogTrigger>
-                            <Button className=" w-fit place-self-end">New Game</Button>
-                        </DialogTrigger>
-                    </div>
-                    <ScoreBoard className="" columns={columns} data={sessions} />
-                </div>
-            </div>
-            <DialogContent className="sm:max-w-md">
-                <DialogHeader>{
-                    isPlayersSet ?
-                        <DialogTitle>Game Info</DialogTitle> :
-                        <DialogTitle>Set Player {(variant == "secondary") ? <>I</> : <>II</>}</DialogTitle>
-                }</DialogHeader>
-                <div className="flex items-center space-x-2">{
-                    isPlayersSet ?
-                        <div className="grid grid-cols-3 grid-rows-3 flex-1 gap-2">
-                            <span className="capitalize text-2xl w-full text-right row-start-1 col-start-1">{playerOne}</span>
-                            <span className="m-auto italic font-bold row-start-2 col-start-2">VS</span>
-                            <span className="capitalize text-2xl w-full text-left row-start-3 col-start-3">{playerTwo}</span>
-                        </div> :
-                        <div className="grid flex-1 gap-2">
-                            <Label htmlFor="nickname" className="sr-only">
-                                Nickname
-                            </Label>
-                            <Input value={inputValue} onChange={handleChange} type="text" id="nickname" placeholder="Nickname" min={5} />
+        <ScoreBoardContext.Provider value={{ sessions, setSessions, loadSessions }}>
+            <Dialog>
+                <div {...props} className={clsx(className, styles.root, "flex justify-center  items-center")}>
+                    <div className="bg-card space-y-4 p-5 w-2/3 h-3/4 rounded-md flex flex-col ">
+                        <div className="flex justify-between  items-center">
+                            <span className="text-xl font-bold">Game Sessions</span>
+                            <DialogTrigger>
+                                <Button className=" w-fit place-self-end">New Game</Button>
+                            </DialogTrigger>
                         </div>
+                        <ScoreBoard className="" columns={columns} data={sessions} />
+                    </div>
+                </div>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>{
+                        isPlayersSet ?
+                            <DialogTitle>Game Info</DialogTitle> :
+                            <DialogTitle>Set Player {(variant == "secondary") ? <>I</> : <>II</>}</DialogTitle>
+                    }</DialogHeader>
+                    <div className="flex items-center space-x-2">{
+                        isPlayersSet ?
+                            <div className="grid grid-cols-3 grid-rows-3 flex-1 gap-2">
+                                <span className="capitalize text-2xl w-full text-right row-start-1 col-start-1">{playerOne}</span>
+                                <span className="m-auto italic font-bold row-start-2 col-start-2">VS</span>
+                                <span className="capitalize text-2xl w-full text-left row-start-3 col-start-3">{playerTwo}</span>
+                            </div> :
+                            <div className="grid flex-1 gap-2">
+                                <Label htmlFor="nickname" className="sr-only">
+                                    Nickname
+                                </Label>
+                                <Input value={inputValue} onChange={handleChange} type="text" id="nickname" placeholder="Nickname" min={5} />
+                            </div>
 
-                }</div>
-                <DialogFooter className="justify-start">
-                    <Button type="submit" variant={variant} onClick={handleSetPlayer}>
-                        <span className="">{isPlayersSet ? <>Start</> : <>Next</>}</span>
-                        <ArrowRight className="h-4 w-4" />
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                    }</div>
+                    <DialogFooter className="justify-start">
+                        <Button type="submit" variant={variant} onClick={handleSetPlayer}>
+                            <span className="">{isPlayersSet ? <>Start</> : <>Next</>}</span>
+                            <ArrowRight className="h-4 w-4" />
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </ScoreBoardContext.Provider>
+
     )
 
 }

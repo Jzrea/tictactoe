@@ -1,8 +1,9 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useContext, useEffect, useRef } from "react";
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { ScoreBoardContext, ScoreBoardContextProps } from "@/pages/dashboard";
 
 interface ScoreBoardProps<TData, TValue> extends HTMLAttributes<HTMLTableElement> {
     columns: ColumnDef<TData, TValue>[]
@@ -14,6 +15,34 @@ export function ScoreBoard<TData, TValue>({
     data,
     className, ...props
 }: ScoreBoardProps<TData, TValue>) {
+    const { sessions, loadSessions }: ScoreBoardContextProps = useContext(ScoreBoardContext);
+    const tableRef = useRef<HTMLDivElement | null>(null);
+
+
+    useEffect(() => {
+        function handleScroll() {
+            if (tableRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = tableRef.current;
+                const scrollBottom = scrollHeight - scrollTop - clientHeight;
+
+                // Assuming a threshold of 50px from the bottom
+                if (scrollBottom <= 50 && loadSessions) {
+                    loadSessions();
+                    // Do something when scroll reaches below
+                }
+            }
+        }
+
+        if (tableRef.current) {
+            tableRef.current.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (tableRef.current) {
+                tableRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [sessions]); // Empty dependency array to run only once on component mount
 
     const table = useReactTable({
         data,
@@ -22,7 +51,7 @@ export function ScoreBoard<TData, TValue>({
     })
 
     return (
-        <div {...props} className={clsx(className, styles.root, "flex-1 overflow-y-auto")}>
+        <div ref={tableRef} {...props} className={clsx(className, styles.root, "flex-1 overflow-y-auto")}>
             <Table className="max-h-40">
                 <TableHeader className="sticky top-0 z-50 bg-primary " >
                     {table.getHeaderGroups().map((headerGroup) => (

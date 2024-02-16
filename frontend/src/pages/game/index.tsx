@@ -31,9 +31,9 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
         setOpen(true);
     }
 
-    useEffect(() => {
-        setHasWinner(true);
-    }, [result])
+    // useEffect(() => {
+    //     setHasWinner(true);
+    // }, [result])
 
 
 
