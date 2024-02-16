@@ -18,7 +18,7 @@ if (process.env.NODE_ENV != "production") {
         DEBUGtest: true
     }));
 }
-app.use("/api/user", require("./routes/user.routes.js"));
+// app.use("/api/sessions", require("./routes/sessions.routes.js"));
 // #endregion
 
 app.use(errorHandler);
