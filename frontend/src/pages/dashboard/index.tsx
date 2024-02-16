@@ -87,19 +87,31 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
 
     const isPlayersSet = (variant == "default");
 
-
     function handleSetPlayer() {
         if (isPlayersSet) {
-            const firstTurn = Math.random() < 0.5 ? playerOne : playerTwo;
-            navigate({
-                pathname: "board",
-                search: createSearchParams({
-                    one: playerOne ?? "",
-                    two: playerTwo ?? "",
-                    turn: firstTurn ?? "",
-                    round: "1",
-                }).toString()
-            })
+            if (playerOne == null || playerOne?.toLowerCase() != inputValue.toLowerCase()) {
+                const firstTurn = Math.random() < 0.5 ? playerOne : playerTwo;
+                navigate({
+                    pathname: "board",
+                    search: createSearchParams({
+                        one: playerOne ?? "",
+                        two: playerTwo ?? "",
+                        turn: firstTurn ?? "",
+                        round: "1",
+                    }).toString()
+                })
+            } else {
+                setPlayers(prev => {
+                    prev.set("two", "")
+                    setInputValue("");
+                    return prev
+                })
+                toast({
+                    variant: "destructive",
+                    title: "Nickname taken",
+                    description: "Use diffrent nickname",
+                })
+            }
             return
         }
         const setCurrentPlayer = (playerOne?.trim() === '' || playerOne == null) ? "one" : "two";
