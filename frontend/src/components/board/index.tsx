@@ -57,13 +57,12 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
         return () => {
             window.removeEventListener('mousemove', onMouseMoveHandler);
         }
-    }, [board])
+    }, [])
 
     function handlePlayerClick() {
         const rect = document.querySelector("#grid-board");
         if (!rect || !pos) return;
         if (board[pos?.y - 1][pos?.x - 1] != -1) return;
-
         const tempBoard: Column = [...board];
         tempBoard[pos?.y - 1][pos?.x - 1] = (playerTurn) ? 1 : 0;
         switch (checkTicTacToe(tempBoard)) {

@@ -5,7 +5,11 @@ import { Themer } from '../themer/index.tsx';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import clsx from 'clsx';
 import { Circle, X, Grid3X3 } from "lucide-react";
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from '../ui/use-toast.ts';
+import axios from 'axios';
+import { EventHandler } from 'react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog.tsx';
 
 
 export interface navbarProps {
@@ -66,10 +70,34 @@ export function NavBar({ className }: navbarProps) {
         </div>}
       </>
     }
+  }
 
+  const navigate = useNavigate();
 
+  async function saveSession() {
+    try {
+      if (result && result.length > 0)
+        await axios.post("/session", {
+          playerOne,
+          playerTwo,
+          result
+        });
 
+    } catch (err) {
+      if (err instanceof Error) {
 
+        toast({
+          variant: "destructive",
+          title: "Something went wrong saving session",
+          description: err.message,
+        })
+      }
+    }
+  }
+
+  function onExitHandler() {
+    saveSession();
+    navigate("/")
   }
 
   return <nav className={clsx(
@@ -81,9 +109,24 @@ export function NavBar({ className }: navbarProps) {
         <Grid3X3 className={clsx(styles.home, "")} />Tic Tac Toe
       </div>
       :
-      <Link className={clsx('inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50', 'p-2 w-fit flex gap-2 text-xl hover:bg-accent hover:text-accent-foreground')} to={'/'}>
-        <HomeIcon className={clsx(styles.home, "")} />Dashboard
-      </Link>}
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <Link className={clsx('inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50', 'p-2 w-fit flex gap-2 text-xl hover:bg-accent hover:text-accent-foreground')} to={'/'}>
+            <HomeIcon className={clsx(styles.home, "")} />Dashboard
+          </Link>
+        </AlertDialogTrigger>
+        <AlertDialogContent >
+          <AlertDialogHeader>
+            <AlertDialogTitle>Exit Current Game</AlertDialogTitle>
+            <AlertDialogDescription>are you certain, current round data will be lost?</AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={onExitHandler}>Exit</AlertDialogCancel>
+            <AlertDialogAction >Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>}
     {(loc == "/board") && <div className={cn(styles.info, " flex justify-evenly font-bold text-2xl")}>
       <div className='items-center space-x-3 max-w-44 overflow-x-auto'>{
         getTrophies('1')
