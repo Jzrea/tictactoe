@@ -42,7 +42,7 @@ export const BoardPage = ({ className, ...props }: BoardPageProps) => {
             <span className="text-4xl font-bold col-start-4 col-end-[-4] row-start-2 w-full text-center pt-5">Round {numberToRoman(parseInt(round ?? "1"))}</span>
             <div {...props} className={clsx(className, styles.root, "flex justify-center  items-center")}>
                 {(latestWinner == "1" && hasWinner) && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
-                <Board alert={setOpen} winnerState={[hasWinner, setHasWinner]} className="w-full" />
+                <Board alert={setOpen} winnerState={[hasWinner, setHasWinner]} className="w-full aspect-square" />
                 {(latestWinner == "0" && hasWinner) && <ConfettiExplosion {...mediumProps} onComplete={onConfettiComplete} />}
             </div>
         </AlertDialog>

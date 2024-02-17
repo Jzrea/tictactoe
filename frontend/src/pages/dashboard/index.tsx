@@ -94,6 +94,7 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
                         two: playerTwo ?? "",
                         turn: firstTurn ?? "",
                         round: "1",
+                        result: "",
                     }).toString()
                 })
             } else {

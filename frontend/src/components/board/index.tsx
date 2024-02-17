@@ -36,7 +36,7 @@ export const Board = ({ alert, winnerState, className, ...props }: BoardProps) =
     const playerTwo = players.get("two");
     const playerTurn = players.get("turn") == playerOne;
     const currentTurn = players.get("turn");
-    const result = players.get("result") ?? "";
+    const result = players.get("result");
     const round = parseInt(players.get("round") ?? "1");
 
 
