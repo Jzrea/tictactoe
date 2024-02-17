@@ -18,6 +18,7 @@ if (process.env.NODE_ENV != "production") {
         DEBUGtest: true
     }));
 }
+app.use('/', (req, res) => res.send("Server's up"));
 app.use("/api/session", require("./routes/sessions.routes.js"));
 // #endregion
 // FOR MONOREPO DEPLOYMENT
