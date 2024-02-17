@@ -10,7 +10,7 @@ app.listen(process.env.PORT || 3000, () => {
 console.log("connecting to database...");
 
 mongoose
-    .connect(process.env.MONGODB_URI)
+    .connect(`${process.env.MONGODB_URI}`)
     .then(() => {
         console.log("database connected.");
     })
