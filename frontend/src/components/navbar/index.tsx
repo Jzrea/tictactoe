@@ -5,10 +5,9 @@ import { Themer } from '../themer/index.tsx';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import clsx from 'clsx';
 import { Circle, X, Grid3X3 } from "lucide-react";
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from '../ui/use-toast.ts';
 import axios from 'axios';
-import { EventHandler } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog.tsx';
 import { Button } from '../ui/button.tsx';
 

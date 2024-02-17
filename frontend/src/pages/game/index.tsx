@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import styles from "./styles.module.scss"
 import clsx from 'clsx'
 import { useSearchParams } from "react-router-dom"
