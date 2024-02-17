@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "start": "node index.js",
-    "server": "node --watch backend/index.js",
+    "server": "node --watch index.js",
     "client": "npm run dev --prefix ../frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
