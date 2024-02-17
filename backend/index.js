@@ -4,7 +4,7 @@ require("dotenv").config();
 
 
 console.log("connecting to database...");
-await mongoose
+mongoose
     .connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("database connected.");
@@ -12,6 +12,7 @@ await mongoose
     .catch((err) => {
         console.error(err);
     });
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
