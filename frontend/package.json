@@ -54,5 +54,5 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
-  "proxy": "http://localhost:3000/"
+  "proxy": "https://tictactoe-six-beryl.vercel.app/"
 }
