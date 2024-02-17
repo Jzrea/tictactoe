@@ -18,4 +18,4 @@ mongoose
         console.error(err);
     });
 
-export default app;
+module.exports = app;
