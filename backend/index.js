@@ -5,7 +5,7 @@ require("dotenv").config();
 
 console.log("connecting to database...");
 mongoose
-    .connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOAUTH}@cluster0.4bapi30.mongodb.net/?retryWrites=true&w=majority`)
+    .connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("database connected.");
         const port = process.env.PORT || 3000;

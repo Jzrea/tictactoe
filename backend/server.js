@@ -20,15 +20,15 @@ if (process.env.NODE_ENV != "production") {
 }
 app.use("/api/session", require("./routes/sessions.routes.js"));
 // #endregion
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('frontend/build'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-    });
-} else {
-    app.use("*", (req, res) => { res.status(404).json({ error: "access" }); });
-}
+// FOR MONOREPO DEPLOYMENT
+// if (process.env.NODE_ENV === 'production') {
+//     app.use(express.static('frontend/build'));
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+//     });
+// } else {
+//     app.use("*", (req, res) => { res.status(404).json({ error: "access" }); });
+// }
 
 app.use(errorHandler);
 
