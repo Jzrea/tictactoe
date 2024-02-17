@@ -60,7 +60,7 @@ export const columns: ColumnDef<GameSession>[] = [
             const result = (getValue() as string)?.split('');
             if (result.length <= 0) return;
             const pOne = result.filter(char => char == '1').length
-            const pTwo = result.filter(char => !(char == '0')).length
+            const pTwo = result.filter(char => char == '0').length
             const draws = result.filter(char => char == '2').length
 
             return (<div className="flex flex-row space-x-3">
