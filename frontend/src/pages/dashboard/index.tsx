@@ -53,7 +53,10 @@ export const DashboardPage = ({ className, ...props }: DashboardPageProps) => {
                     limit: (sessions.length == 0) ? 20 : 10
                 }
             });
-            const tempSessions: GameSession[] = (req.data.payload as []).map(({ _id, playerOne, playerTwo, result }) => {
+            if (!req.data) return
+            const payload: [] = req.data.payload;
+            if (payload.length <= 0) return;
+            const tempSessions: GameSession[] = payload.map(({ _id, playerOne, playerTwo, result }) => {
                 return {
                     id: _id,
                     playerOne,

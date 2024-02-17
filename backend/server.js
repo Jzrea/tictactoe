@@ -18,8 +18,8 @@ if (process.env.NODE_ENV != "production") {
         DEBUGtest: true
     }));
 }
-app.use('/api', (req, res) => res.send("Server's up"));
 app.use("/api/session", require("./routes/sessions.routes.js"));
+app.use('/api', (req, res) => res.send("Server's up"));
 // #endregion
 // FOR MONOREPO DEPLOYMENT
 // if (process.env.NODE_ENV === 'production') {
