@@ -3,16 +3,15 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server up`);
-});
 console.log("connecting to database...");
-
 mongoose
-    .connect(`${process.env.MONGODB_URI}`)
+    .connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("database connected.");
+        const port = process.env.PORT || 3000;
+        app.listen(port, () => {
+            console.log(`Server started on port ${port}`);
+        });
     })
     .catch((err) => {
         console.error(err);
