@@ -18,7 +18,7 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
 
 
 axios.defaults.withCredentials = false;
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "https://tictactoe-six-beryl.vercel.app/api";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
