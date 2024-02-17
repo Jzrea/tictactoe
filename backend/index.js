@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server started on port ${port}`);
+});
 console.log("connecting to database...");
 
 mongoose
@@ -13,9 +17,5 @@ mongoose
     .catch((err) => {
         console.error(err);
     });
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server started on port ${port}`);
-});
 
 export default app;
